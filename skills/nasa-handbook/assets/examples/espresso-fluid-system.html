@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SH2A-03 Artemis Surface Habitat Operations Handbook, page 2.12-1</title>
+<style>
+  /* ---------- fonts (files in ./fonts, copied from the skill's assets/fonts) ---------- */
+  /* Leroy-template lettering for every drawing label. */
+  @font-face { font-family: "Routed Gothic"; src: url("../fonts/routed-gothic.ttf"); unicode-range: U+0000-0030, U+0032-FFFF; }
+  @font-face { font-family: "Routed Gothic Narrow"; src: url("../fonts/routed-gothic-narrow.ttf"); unicode-range: U+0000-0030, U+0032-FFFF; }
+  /* Leroy's plain "1" reads as "I" (API V1, T1). Borrow a flagged one. Delete these two
+     rules for a strictly period look on pages without versions or subscripts. */
+  @font-face { font-family: "Routed Gothic"; src: local("Helvetica Neue"), local("HelveticaNeue"), local("Arial"); unicode-range: U+0031; }
+  @font-face { font-family: "Routed Gothic Narrow"; src: local("Helvetica Neue"), local("HelveticaNeue"), local("Arial"); unicode-range: U+0031; }
+  /* IBM Selectric Letter Gothic: crew checklists only. */
+  @font-face { font-family: "Letter Gothic"; src: url("../fonts/LetterGothicCode-R.ttf"); font-weight: 400; }
+  @font-face { font-family: "Letter Gothic"; src: url("../fonts/LetterGothicCode-B.ttf"); font-weight: 700; }
+
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #8a8a86; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @media print { html, body { background: none; } }
+
+  :root {
+    --ink: #000000;
+    --paper: #fbfaf5;   /* screen only; print is pure white (below) */
+    --type: "Iowan Old Style", "Iowan", Georgia, serif;
+    --leroy: "Routed Gothic Narrow", "Routed Gothic", sans-serif;
+    --selectric: "Letter Gothic", "Courier", monospace;
+  }
+  /* Must come after :root. A printed off-white tint is halftoned into dots. */
+  @media print { :root { --paper: #ffffff; } }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    padding: 9mm 15mm 0 16mm;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--type);
+    font-size: 8pt;
+    line-height: 1.33;
+    letter-spacing: 0.055em;   /* the Selectric typewriter spacing */
+    overflow: hidden;
+  }
+
+  /* ---------- running head / foot ---------- */
+  .head { text-align: center; line-height: 1.25; }
+  .head .doc { font-weight: 700; font-size: 8.6pt; letter-spacing: 0.06em; }
+  .head .title { font-weight: 700; font-size: 8.6pt; letter-spacing: 0.08em; }
+  .head .part { margin-top: 2.2mm; font-size: 8.2pt; letter-spacing: 0.1em; }
+  .rule { height: 0; border-top: 1.5pt solid var(--ink); margin: 1.4mm -2mm 0; }
+
+  .foot { position: absolute; left: 16mm; right: 15mm; bottom: 8mm; }
+  .foot .rule { margin: 0 -2mm 1.6mm; }
+  .foot .sub { text-align: center; letter-spacing: 0.1em; font-size: 8.2pt; }
+  .foot .line { display: flex; align-items: baseline; justify-content: space-between; margin-top: 2.2mm; font-size: 8.2pt; }
+  .foot .fill { display: inline-block; border-bottom: 0.6pt solid var(--ink); text-align: center; padding: 0 1mm; font-size: 8.8pt; letter-spacing: 0.03em; }
+
+  /* ---------- section opener ---------- */
+  .opener { text-align: center; letter-spacing: 0.12em; margin: 3.4mm 0 2mm; line-height: 1.6; }
+
+  /* ---------- numbered paragraphs ---------- */
+  .para { display: grid; grid-template-columns: 19mm 1fr; position: relative; }
+  .para .num { letter-spacing: 0.08em; }
+  .para h2, .para h3 { margin: 0 0 0.8mm; font: inherit; font-weight: 400; letter-spacing: 0.08em; }
+  .para h3 { text-decoration: underline; text-underline-offset: 1.6pt; text-decoration-thickness: 0.5pt; letter-spacing: 0.06em; }
+  .para p { margin: 0 0 1mm; text-indent: 9mm; text-align: left; }
+  .para p.flush { text-indent: 0; }
+  .changebar { position: absolute; left: -9mm; width: 1.3mm; background: var(--ink); }
+  .nowrap { white-space: nowrap; }
+
+  /* ---------- figures ---------- */
+  figure { margin: 1.6mm 0 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { text-align: center; margin-top: 0.6mm; letter-spacing: 0.07em; }
+  figcaption .n { margin-right: 3mm; }
+
+  /* SVG units are millimetres on paper: a figure 180 units wide fills the 179 mm column. */
+  svg text { font-family: var(--leroy); fill: var(--ink); letter-spacing: 0.04px; }
+  svg .o    { fill: none; stroke: var(--ink); stroke-width: 0.42; stroke-linejoin: round; stroke-linecap: round; } /* object line */
+  svg .of   { fill: var(--paper); stroke: var(--ink); stroke-width: 0.42; stroke-linejoin: round; }               /* object, opaque */
+  svg .t    { fill: none; stroke: var(--ink); stroke-width: 0.17; stroke-linecap: round; }                        /* thin detail */
+  svg .hid  { fill: none; stroke: var(--ink); stroke-width: 0.22; stroke-dasharray: 1.3 0.7; }                     /* hidden */
+  svg .cl   { fill: none; stroke: var(--ink); stroke-width: 0.16; stroke-dasharray: 5 0.8 0.9 0.8; }               /* centerline */
+  svg .cut  { fill: none; stroke: var(--ink); stroke-width: 0.5; stroke-dasharray: 5 1 1 1; }                      /* section cut */
+  svg .ld   { fill: none; stroke: var(--ink); stroke-width: 0.16; marker-end: url(#nh-leader); }                   /* leader */
+  svg .dim  { fill: none; stroke: var(--ink); stroke-width: 0.16; marker-start: url(#nh-dim); }                    /* dimension half */
+  svg .w    { fill: none; stroke: var(--ink); stroke-width: 0.3; stroke-linejoin: round; }                         /* wire */
+  svg .wa   { fill: none; stroke: var(--ink); stroke-width: 0.3; stroke-linejoin: round; marker-end: url(#nh-arrow); } /* wire with arrow */
+  svg .box  { fill: var(--paper); stroke: var(--ink); stroke-width: 0.45; }
+  svg .panel{ fill: none; stroke: var(--ink); stroke-width: 0.3; stroke-dasharray: 2 1; }
+  svg .ev   { fill: none; stroke: var(--ink); stroke-width: 0.18; stroke-dasharray: 1 0.7; }                       /* timeline event */
+  svg .vid  { fill: url(#nh-hatch); stroke: var(--ink); stroke-width: 0.35; }                                      /* hatched bar */
+  svg .aud  { fill: var(--paper); stroke: var(--ink); stroke-width: 0.35; }                                        /* plain bar */
+  svg .gap  { fill: var(--paper); stroke: var(--ink); stroke-width: 0.35; stroke-dasharray: 0.6 0.5; }             /* dotted bar */
+  svg .dot  { fill: var(--ink); }
+  svg .lbl   { font-size: 2.35px; }                                         /* callouts, box titles */
+  svg .lbl-s { font-size: 2.05px; }                                         /* secondary lines, wire names */
+  svg .lbl-b { font-size: 2.5px; font-family: "Routed Gothic", sans-serif; } /* view titles, big letters */
+  svg .code  { font-size: 2.4px; font-family: "Routed Gothic", sans-serif; } /* figure code, bottom right */
+
+  /* ---------- lower band: data table + notice + checklist ---------- */
+  .lower { display: grid; grid-template-columns: 1fr 64mm; column-gap: 6mm; margin-top: 2.8mm; }
+  .tcap { text-align: center; letter-spacing: 0.07em; margin: 0 0 0.8mm; }
+  table { width: 100%; border-collapse: collapse; font-size: 7.3pt; line-height: 1.2; }
+  th, td { border: 0.6pt solid var(--ink); padding: 0.35mm 1.6mm; text-align: left; vertical-align: top; font-weight: 400; }
+  thead th { text-align: center; letter-spacing: 0.1em; padding: 0.5mm 1.6mm; }
+  td.v { white-space: nowrap; }
+
+  .notice { text-align: left; margin-bottom: 1.8mm; }
+  .notice .tag { display: block; text-align: center; letter-spacing: 0.18em; font-weight: 700; text-decoration: underline; text-underline-offset: 1.6pt; text-decoration-thickness: 0.6pt; margin-bottom: 0.8mm; }
+  .notice p { margin: 0; font-size: 7.4pt; line-height: 1.28; }
+
+  .card { border: 0.8pt solid var(--ink); font-family: var(--selectric); font-size: 7.1pt; line-height: 1.3; letter-spacing: 0; }
+  .card .bar { background: var(--ink); color: var(--paper); font-weight: 700; padding: 0.5mm 1.8mm; display: flex; justify-content: space-between; }
+  .card ol { list-style: none; margin: 0; padding: 0.8mm 1.8mm 1mm; }
+  .card li { display: grid; grid-template-columns: 3.2mm 1fr; white-space: pre; }
+
+  /* black thumb tab, bleeds off the trim edge */
+  .tab { position: absolute; right: 0; top: 112mm; width: 8.5mm; height: 17mm; background: var(--ink); color: var(--paper);
+    font-family: "Routed Gothic", sans-serif; font-size: 8pt; letter-spacing: 0.08em; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+
+<!-- Shared drawing defs: every figure on the page uses these ids. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="nh-leader" viewBox="0 0 6 4" refX="5.6" refY="2" markerWidth="2.1" markerHeight="1.05" markerUnits="userSpaceOnUse" orient="auto" preserveAspectRatio="none"><path d="M0,0 L6,2 L0,4 Z" fill="#000"/></marker>
+    <marker id="nh-arrow" viewBox="0 0 6 4" refX="5.6" refY="2" markerWidth="2.4" markerHeight="1.3" markerUnits="userSpaceOnUse" orient="auto" preserveAspectRatio="none"><path d="M0,0 L6,2 L0,4 Z" fill="#000"/></marker>
+    <marker id="nh-dim" viewBox="0 0 6 4" refX="0" refY="2" markerWidth="2.2" markerHeight="0.95" markerUnits="userSpaceOnUse" orient="auto" preserveAspectRatio="none"><path d="M6,0 L0,2 L6,4 Z" fill="#000"/></marker>
+    <pattern id="nh-hatch" width="1.1" height="1.1" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="1.1" stroke="#000" stroke-width="0.2"/></pattern>
+    <pattern id="nh-bp" width="1.4" height="1.4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="0.7" height="1.4" fill="#000"/></pattern>
+  </defs>
+</svg>
+
+<div class="page">
+
+  <header class="head">
+    <div class="doc">SH2A-03-BLOCK I-(1)</div>
+    <div class="title">ARTEMIS SURFACE HABITAT OPERATIONS HANDBOOK</div>
+    <div class="part">SYSTEMS DATA</div>
+    <div class="rule"></div>
+  </header>
+
+  <div class="tab">PEU</div>
+
+  <div class="opener">
+    SECTION 2 &nbsp;&nbsp;&middot;&nbsp;&nbsp; SUBSECTION 2.12<br>
+    PRESSURIZED EXTRACTION UNIT
+  </div>
+
+  <section class="para">
+    <div class="num">2.12.1</div>
+    <div>
+      <h2>INTRODUCTION.</h2>
+      <p>The pressurized extraction unit (PEU) prepares espresso in the surface habitat galley. At the 56.5 kPa (8.2 psia) cabin pressure water boils at 84 °C (183 °F), below the 93 °C (199 °F) brew temperature, so the PEU brews at sea-level pressure in a sealed circuit and releases the extract to the cabin only after cooling it (figure 2.12-1).</p>
+    </div>
+  </section>
+
+  <!-- ===== FIGURE 2.12-1: general arrangement + section A-A of the brew group ===== -->
+  <figure>
+    <svg viewBox="0 0 180 68" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pressurized extraction unit general arrangement, side elevation, with a section through the brew group">
+
+      <!-- ===== housing: body + head module ===== -->
+      <path class="of" d="M27,14 L93,14 L98,19 L98,26 L80,26 L80,52 L27,52 Q26,52 26,51 L26,15 Q26,14 27,14 Z"/>
+      <line class="t" x1="80" y1="14" x2="80" y2="26"/>
+      <g class="t">
+        <circle cx="28.2" cy="16.2" r="0.45"/><circle cx="77.8" cy="16.2" r="0.45"/>
+        <circle cx="28.2" cy="49.8" r="0.45"/><circle cx="77.8" cy="49.8" r="0.45"/>
+        <circle cx="82.2" cy="24.2" r="0.45"/>
+      </g>
+
+      <!-- hidden internals -->
+      <rect class="hid" x="30" y="18" width="16" height="7.6"/>
+      <text class="lbl-s" x="38" y="22.6" text-anchor="middle">CONTROLLER</text>
+      <rect class="hid" x="52" y="18" width="22" height="7.6"/>
+      <text class="lbl-s" x="63" y="22.6" text-anchor="middle">THERMOBLOCK</text>
+      <rect class="hid" x="30" y="40" width="12" height="7.4"/>
+      <text class="lbl-s" x="36" y="44.4" text-anchor="middle">PUMP P1</text>
+      <rect class="hid" x="46" y="40" width="16" height="7.4"/>
+      <text class="lbl-s" x="54" y="44.4" text-anchor="middle">HX1 COOLER</text>
+      <rect class="hid" x="66" y="40.6" width="6" height="5.4"/>
+      <polyline class="hid" points="72,43.3 76,43.3 76,35.3 80,35.3"/>
+
+      <!-- rear: electrical connector J1, potable water QD -->
+      <rect class="of" x="22.4" y="19" width="3.6" height="4.4"/>
+      <rect class="of" x="21.2" y="19.7" width="1.2" height="3"/>
+      <line class="t" x1="23.6" y1="19" x2="23.6" y2="23.4"/><line class="t" x1="24.8" y1="19" x2="24.8" y2="23.4"/>
+      <rect class="of" x="22.6" y="43" width="3.4" height="2"/>
+      <rect class="of" x="20.6" y="42.2" width="2" height="3.6" rx="0.3"/>
+      <rect class="of" x="19.4" y="43.4" width="1.2" height="1.2"/>
+
+      <!-- feet / seat track fittings -->
+      <rect class="of" x="28.5" y="52" width="5" height="1.4"/>
+      <rect class="of" x="72.5" y="52" width="5" height="1.4"/>
+
+      <!-- drip tray -->
+      <rect class="of" x="80" y="49.4" width="18" height="2.6"/>
+      <line class="t" x1="80.6" y1="50.2" x2="97.4" y2="50.2"/>
+
+      <!-- BREW PRESS gauge on the chamfer, BREW pushbutton on the front face -->
+      <g transform="translate(95.5 16.5) rotate(45)">
+        <rect class="of" x="-2.2" y="-1.1" width="4.4" height="1.1" rx="0.3"/>
+        <line class="t" x1="-1.6" y1="-0.55" x2="1.6" y2="-0.55"/>
+      </g>
+      <rect class="of" x="98" y="21.6" width="1.1" height="2.2" rx="0.3"/>
+
+      <!-- group head, clamp ring, portafilter -->
+      <rect class="of" x="84" y="26" width="10" height="2.2"/>
+      <rect class="of" x="83.2" y="28.2" width="11.6" height="0.8"/>
+      <path class="of" d="M93.4,29.8 L100,30 L112.6,31.2 C114.4,31.4 114.4,33.6 112.6,33.7 L100,32.4 L93.4,32.2 Z"/>
+      <path class="of" d="M84.6,29 L93.4,29 L93.4,31.6 Q93.4,32.6 92.4,32.6 L85.6,32.6 Q84.6,32.6 84.6,31.6 Z"/>
+      <line class="t" x1="84.6" y1="29.9" x2="93.4" y2="29.9"/>
+      <g class="t">
+        <line x1="104" y1="30.7" x2="104" y2="32.5"/><line x1="106" y1="30.9" x2="106" y2="32.7"/>
+        <line x1="108" y1="31.1" x2="108" y2="32.9"/><line x1="110" y1="31.3" x2="110" y2="33.1"/>
+      </g>
+
+      <!-- extract spout arm and nozzle -->
+      <rect class="of" x="80" y="34.4" width="10" height="1.8"/>
+      <rect class="of" x="88.2" y="36.2" width="1.8" height="1.6"/>
+
+      <!-- cup, restraint clip -->
+      <path class="of" d="M83.8,41.4 L94.2,41.4 L93.2,47.4 Q92.9,48.4 91.8,48.4 L86.2,48.4 Q85.1,48.4 84.8,47.4 Z"/>
+      <rect class="of" x="86" y="48.4" width="6" height="1"/>
+      <path class="o" d="M93.95,42.8 C96.8,42.6 96.9,46.2 93.4,46"/>
+      <path class="o" d="M82.4,49.4 L82.4,46 Q82.4,44.6 84.3,44.6"/>
+
+      <!-- GROUP LOCK lever (shown at LOCK) -->
+      <polygon class="of" points="86.69,21.19 77.87,6.72 76.93,7.28 85.31,22.01"/>
+      <circle class="of" cx="77.4" cy="7" r="1.6"/>
+      <circle class="of" cx="86" cy="21.6" r="1.5"/>
+      <circle class="dot" cx="86" cy="21.6" r="0.35"/>
+
+      <!-- section cut A-A through the brew group -->
+      <line class="cut" x1="89" y1="23.4" x2="89" y2="33.8"/>
+      <polyline class="w" points="89,23.4 92.7,23.4"/><path class="dot" d="M92.5,22.4 L94.5,23.4 L92.5,24.4 Z"/>
+      <polyline class="w" points="89,33.8 92.7,33.8"/><path class="dot" d="M92.5,32.8 L94.5,33.8 L92.5,34.8 Z"/>
+      <text class="lbl-b" x="95.3" y="24.3">A</text>
+      <text class="lbl-b" x="95.3" y="34.7">A</text>
+
+      <!-- ===== callouts: top ===== -->
+      <text class="lbl" x="46" y="5.6">GROUP LOCK LEVER</text>
+      <text class="lbl" x="46" y="8.2">(LOCK – VENT – OPEN)</text>
+      <line class="ld" x1="66" y1="5" x2="75.7" y2="6.6"/>
+      <text class="lbl" x="90" y="8.6">BREW PRESS GAUGE, 0–12 BAR</text>
+      <line class="ld" x1="95.6" y1="9.6" x2="96.2" y2="15.3"/>
+
+      <!-- ===== callouts: left (rear) ===== -->
+      <text class="lbl" x="11.6" y="27.6">ELEC CONN</text>
+      <text class="lbl" x="11.6" y="30.2">J1, 120 VDC</text>
+      <line class="ld" x1="18" y1="25.4" x2="22.6" y2="23.6"/>
+      <text class="lbl" x="11.6" y="36.2">POTABLE</text>
+      <text class="lbl" x="11.6" y="38.8">WATER QD</text>
+      <line class="ld" x1="20.2" y1="39.6" x2="21.4" y2="42"/>
+
+      <!-- ===== callouts: right (front) ===== -->
+      <text class="lbl" x="103.4" y="21">BREW PB</text>
+      <line class="ld" x1="103" y1="21.8" x2="99.4" y2="22.6"/>
+      <text class="lbl" x="103.4" y="27.2">GROUP HEAD</text>
+      <line class="ld" x1="103" y1="26.6" x2="94.3" y2="27.3"/>
+      <text class="lbl" x="103.4" y="37.6">PORTAFILTER</text>
+      <line class="ld" x1="105.4" y1="35.2" x2="106.4" y2="32.8"/>
+      <text class="lbl" x="103.4" y="41.4">EXTRACT SPOUT</text>
+      <line class="ld" x1="103" y1="40.6" x2="90.3" y2="37.4"/>
+      <text class="lbl" x="103.4" y="45.6">DEMITASSE, 80 ML</text>
+      <line class="ld" x1="103" y1="45" x2="97" y2="44.6"/>
+      <text class="lbl" x="103.4" y="51.6">DRIP TRAY</text>
+      <line class="ld" x1="103" y1="51" x2="98.3" y2="50.8"/>
+
+      <!-- ===== callouts: bottom ===== -->
+      <text class="lbl" x="28.4" y="58.6">SEAT TRACK FITTING (4)</text>
+      <line class="ld" x1="31.2" y1="56.2" x2="31" y2="53.6"/>
+      <text class="lbl" x="56" y="57.6">BACK-PRESSURE</text>
+      <text class="lbl" x="56" y="60.2">VALVE BPV-2</text>
+      <line class="ld" x1="62.4" y1="55.2" x2="68.6" y2="46.2"/>
+      <text class="lbl" x="78" y="57.6">CUP RESTRAINT</text>
+      <line class="ld" x1="82.2" y1="55.2" x2="82.4" y2="47.6"/>
+
+      <!-- ===== dimensions ===== -->
+      <line class="t" x1="25.4" y1="14" x2="6.6" y2="14"/>
+      <line class="t" x1="25.4" y1="52" x2="6.6" y2="52"/>
+      <line class="dim" x1="8.2" y1="14" x2="8.2" y2="26.4"/>
+      <line class="dim" x1="8.2" y1="52" x2="8.2" y2="39.8"/>
+      <text class="lbl" transform="translate(9.1 38.6) rotate(-90)">11.97 [304]</text>
+      <line class="t" x1="26" y1="52.6" x2="26" y2="66.4"/>
+      <line class="t" x1="98" y1="52.6" x2="98" y2="66.4"/>
+      <line class="dim" x1="26" y1="65.2" x2="55.4" y2="65.2"/>
+      <line class="dim" x1="98" y1="65.2" x2="68.6" y2="65.2"/>
+      <text class="lbl" x="62" y="66" text-anchor="middle">22.68 [576]</text>
+
+      <!-- ===== SECTION A-A: brew group, scale 1/4 ===== -->
+      <g transform="translate(0 10)">
+        <!-- group head (cut) -->
+        <rect x="138" y="8" width="24" height="9" fill="url(#nh-hatch)"/>
+        <g style="fill: var(--paper)">
+          <rect x="149.2" y="7.9" width="1.6" height="6.6"/>
+          <rect x="142" y="14.4" width="14" height="2.7"/>
+          <rect x="158.4" y="7.9" width="1.4" height="9.2"/>
+        </g>
+        <polyline class="o" points="149.2,8 138,8 138,17 142,17"/>
+        <polyline class="o" points="150.8,8 158.4,8"/>
+        <polyline class="o" points="159.8,8 162,8 162,17 159.8,17"/>
+        <line class="o" x1="156" y1="17" x2="158.4" y2="17"/>
+        <line class="o" x1="149.2" y1="5.6" x2="149.2" y2="14.4"/><line class="o" x1="150.8" y1="5.6" x2="150.8" y2="14.4"/>
+        <line class="o" x1="158.4" y1="5.6" x2="158.4" y2="17"/><line class="o" x1="159.8" y1="5.6" x2="159.8" y2="17"/>
+        <polyline class="o" points="142,17 142,14.4 149.2,14.4"/>
+        <polyline class="o" points="150.8,14.4 156,14.4 156,17"/>
+        <line class="hid" x1="142" y1="16.4" x2="156" y2="16.4"/>
+        <!-- face seals -->
+        <rect class="dot" x="139.6" y="17" width="1.4" height="0.8"/>
+        <rect class="dot" x="156.6" y="17" width="1.4" height="0.8"/>
+        <rect class="dot" x="160.2" y="17" width="1.4" height="0.8"/>
+        <!-- portafilter (cut) -->
+        <path d="M138,17.8 H162 V26.4 Q162,27.6 160.8,27.6 H139.2 Q138,27.6 138,26.4 Z" fill="url(#nh-hatch)"/>
+        <g style="fill: var(--paper)">
+          <rect x="142" y="17.7" width="14" height="8.3"/>
+          <rect x="156" y="24.6" width="3.8" height="1.4"/>
+          <rect x="158.4" y="17.7" width="1.4" height="8.3"/>
+        </g>
+        <path class="o" d="M142,17.8 H138 V26.4 Q138,27.6 139.2,27.6 H160.8 Q162,27.6 162,26.4 V17.8 H159.8"/>
+        <line class="o" x1="156" y1="17.8" x2="158.4" y2="17.8"/>
+        <polyline class="o" points="142,17.8 142,26 159.8,26 159.8,17.8"/>
+        <polyline class="o" points="156,17.8 156,24.6 158.4,24.6 158.4,17.8"/>
+        <line class="hid" x1="142" y1="23.6" x2="156" y2="23.6"/>
+        <!-- puck: top face and granular fill -->
+        <line class="t" x1="142" y1="18.6" x2="156" y2="18.6"/>
+        <g class="dot"><circle cx="146.7" cy="19.5" r="0.17"/><circle cx="150.9" cy="19.2" r="0.17"/><circle cx="149.5" cy="20.4" r="0.17"/><circle cx="143.3" cy="20.9" r="0.17"/><circle cx="143.5" cy="19.3" r="0.17"/><circle cx="148.0" cy="22.2" r="0.17"/><circle cx="150.6" cy="22.7" r="0.17"/><circle cx="155.1" cy="19.1" r="0.17"/><circle cx="153.6" cy="20.1" r="0.17"/><circle cx="144.4" cy="19.4" r="0.17"/><circle cx="146.5" cy="22.2" r="0.17"/><circle cx="144.9" cy="21.2" r="0.17"/><circle cx="150.8" cy="20.4" r="0.17"/><circle cx="149.6" cy="19.2" r="0.17"/><circle cx="148.4" cy="20.1" r="0.17"/><circle cx="152.8" cy="21.7" r="0.17"/><circle cx="149.3" cy="22.4" r="0.17"/><circle cx="151.9" cy="20.1" r="0.17"/><circle cx="151.5" cy="21.3" r="0.17"/><circle cx="153.4" cy="22.7" r="0.17"/><circle cx="143.4" cy="22.0" r="0.17"/><circle cx="146.2" cy="20.6" r="0.17"/><circle cx="147.3" cy="21.2" r="0.17"/><circle cx="154.8" cy="21.7" r="0.17"/><circle cx="149.2" cy="21.4" r="0.17"/><circle cx="154.8" cy="20.7" r="0.17"/><circle cx="154.6" cy="22.9" r="0.17"/><circle cx="145.4" cy="19.8" r="0.17"/><circle cx="144.5" cy="22.2" r="0.17"/><circle cx="151.5" cy="22.4" r="0.17"/><circle cx="145.4" cy="22.7" r="0.17"/><circle cx="153.7" cy="21.6" r="0.17"/><circle cx="142.7" cy="20.0" r="0.17"/><circle cx="144.3" cy="20.3" r="0.17"/><circle cx="150.6" cy="21.6" r="0.17"/><circle cx="153.8" cy="19.0" r="0.17"/><circle cx="152.2" cy="19.0" r="0.17"/><circle cx="147.6" cy="19.0" r="0.17"/><circle cx="142.7" cy="22.7" r="0.17"/><circle cx="152.7" cy="20.7" r="0.17"/><circle cx="147.3" cy="22.9" r="0.17"/><circle cx="148.5" cy="19.0" r="0.17"/><circle cx="143.8" cy="22.9" r="0.17"/><circle cx="145.8" cy="21.5" r="0.17"/><circle cx="145.9" cy="19.0" r="0.17"/><circle cx="147.4" cy="20.2" r="0.17"/></g>
+        <!-- flow: in from the thermoblock, out of the sump to HX1 -->
+        <line class="wa" x1="150" y1="2.4" x2="150" y2="13.8"/>
+        <polyline class="wa" points="152,25 159.1,25 159.1,2.6"/>
+        <text class="lbl-s" x="148.4" y="3.6" text-anchor="end">FROM THERMOBLOCK</text>
+        <text class="lbl-s" x="160.8" y="3.6">TO HX1</text>
+        <!-- pressure zones -->
+        <polyline class="w" points="162.8,8 164,8 164,16.8 162.8,16.8"/>
+        <text class="lbl-s" x="165.2" y="11.9">10.0 BAR ABS</text>
+        <text class="lbl-s" x="165.2" y="14.4">93 °C</text>
+        <polyline class="w" points="162.8,23.6 164,23.6 164,27.6 162.8,27.6"/>
+        <text class="lbl-s" x="165.2" y="25.2">101 KPA ABS</text>
+        <text class="lbl-s" x="165.2" y="27.7">88 °C</text>
+        <text class="lbl-s" x="165.2" y="31.6">CABIN</text>
+        <text class="lbl-s" x="165.2" y="34.1">56.5 KPA ABS</text>
+        <!-- callouts -->
+        <text class="lbl" x="136.4" y="16" text-anchor="end">SHOWER SCREEN</text>
+        <line class="ld" x1="137" y1="15.4" x2="143" y2="16.3"/>
+        <text class="lbl" x="136.4" y="19.4" text-anchor="end">FACE SEAL (3)</text>
+        <line class="ld" x1="137" y1="18.7" x2="139.8" y2="17.6"/>
+        <text class="lbl" x="136.4" y="22.4" text-anchor="end">PUCK, 18 G</text>
+        <line class="ld" x1="137" y1="21.6" x2="144" y2="21.6"/>
+        <text class="lbl" x="136.4" y="26" text-anchor="end">SEALED SUMP</text>
+        <line class="ld" x1="137" y1="25.2" x2="143.6" y2="25"/>
+        <text class="lbl-b" x="150" y="32.6" text-anchor="middle">SECTION A–A</text>
+        <text class="lbl-s" x="150" y="35.4" text-anchor="middle">LOOKING FWD, SCALE 1/4</text>
+      </g>
+
+      <!-- coordinate axes -->
+      <g transform="translate(150 62)">
+        <line class="wa" x1="0" y1="0" x2="8.4" y2="0"/>
+        <line class="wa" x1="0" y1="0" x2="0" y2="-5.6"/>
+        <circle r="0.9" class="of"/><circle r="0.28" class="dot"/>
+        <text class="lbl-s" x="9.2" y="0.8">+X</text>
+        <text class="lbl-s" x="-1.2" y="-6.4">+Z</text>
+        <text class="lbl-s" x="-4.8" y="2.8">+Y</text>
+      </g>
+
+      <text class="code" x="178.6" y="67.4" text-anchor="end">PEU-501A</text>
+    </svg>
+    <figcaption><span class="n">Figure 2.12-1.</span>Pressurized Extraction Unit, General Arrangement</figcaption>
+  </figure>
+
+  <section class="para" style="margin-top:2.2mm">
+    <div class="num">2.12.2</div>
+    <div>
+      <h2>FUNCTIONAL DESCRIPTION.</h2>
+      <p>With cb PEU HTR closed, the thermoblock heats to 93 °C and the HTR RDY talkback goes gray. GROUP LOCK clamps the portafilter to the group head. BREW starts pump P1, which draws potable water through extract cooler HX1 and drives it through the thermoblock and the puck at 10.0 bar absolute. The extract collects in the sealed sump, gives up its heat to the incoming water in HX1 and leaves through BPV-2 (figure 2.12-2).</p>
+    </div>
+  </section>
+
+  <section class="para">
+    <div class="changebar" style="top:0.4mm; height:6.8mm"></div>
+    <div class="num">2.12.2.1</div>
+    <div>
+      <h3>Back-Pressure Hold.</h3>
+      <p class="flush">Valve BPV-2 holds the sump at 101 kPa (14.7 psia) and opens only while extract temperature T2 is at least 4 °C below the cabin boiling point: <span class="nowrap">T2 ≤ T<sub>sat</sub>(56.5 kPa) − 4 °C = 80 °C (176 °F)</span>.</p>
+    </div>
+  </section>
+
+  <!-- ===== FIGURE 2.12-2: functional diagram + detail A, saturation curve ===== -->
+  <figure>
+    <svg viewBox="0 -3.6 180 50" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PEU functional diagram with station pressures and temperatures, and the water saturation curve">
+
+      <!-- ===== electrical ===== -->
+      <rect class="box" x="24" y="-2" width="2" height="18"/>
+      <text class="lbl-s" transform="translate(22.9 7) rotate(-90)" text-anchor="middle">120 VDC BUS 2</text>
+      <!-- CB1 PEU HTR -->
+      <line class="w" x1="26" y1="3" x2="31.7" y2="3"/>
+      <circle class="dot" cx="26" cy="3" r="0.5"/>
+      <circle class="of" cx="31.7" cy="3" r="0.6"/><circle class="of" cx="36.3" cy="3" r="0.6"/>
+      <path class="w" d="M31.9,2.1 Q34,-0.1 36.1,2.1"/>
+      <line class="w" x1="34" y1="0.6" x2="34" y2="-0.9"/><line class="w" x1="32.9" y1="-0.9" x2="35.1" y2="-0.9"/>
+      <text class="lbl-s" x="34" y="5.7" text-anchor="middle">CB1 15A</text>
+      <text class="lbl-s" x="34" y="8.1" text-anchor="middle">PEU HTR</text>
+      <polyline class="wa" points="36.9,3 73,3 73,7.6"/>
+      <!-- S2 BREW -->
+      <line class="w" x1="26" y1="12" x2="41" y2="12"/>
+      <circle class="dot" cx="26" cy="12" r="0.5"/>
+      <circle class="of" cx="41.6" cy="12" r="0.6"/><circle class="of" cx="46.4" cy="12" r="0.6"/>
+      <line class="w" x1="40.8" y1="9.8" x2="47.2" y2="9.8"/>
+      <line class="w" x1="44" y1="9.8" x2="44" y2="7.8"/><line class="w" x1="42.8" y1="7.8" x2="45.2" y2="7.8"/>
+      <text class="lbl-s" x="44" y="15.2" text-anchor="middle">S2 BREW</text>
+      <polyline class="wa" points="47,12 63,12 63,20"/>
+      <!-- HTR RDY talkback -->
+      <circle cx="84" cy="3.4" r="2" fill="url(#nh-bp)" stroke="#000" stroke-width="0.35"/>
+      <line class="w" x1="84" y1="5.4" x2="84" y2="8"/>
+      <text class="lbl-s" x="87.2" y="3">HTR RDY TB</text>
+      <text class="lbl-s" x="87.2" y="5.4">GRAY = 93 °C, BP = HEATING</text>
+
+      <!-- ===== water: potable bus, V1, HX1 cold pass, P1, thermoblock ===== -->
+      <rect class="box" x="2" y="18.6" width="17" height="8.8"/>
+      <text class="lbl" x="10.5" y="22.6" text-anchor="middle">POTABLE BUS</text>
+      <text class="lbl-s" x="10.5" y="25.4" text-anchor="middle">GALLEY RACK 2</text>
+      <line class="w" x1="19" y1="23" x2="23.4" y2="23"/>
+      <path class="of" d="M23.4,21.6 L23.4,24.4 L25.8,23 Z"/>
+      <line class="w" x1="26" y1="21.6" x2="26" y2="24.4"/>
+      <text class="lbl-s" x="24.7" y="20.6" text-anchor="middle">V1</text>
+      <line class="wa" x1="26" y1="23" x2="33.6" y2="23"/>
+
+      <rect class="box" x="34" y="19" width="22" height="22"/>
+      <line class="ld" x1="35" y1="23" x2="55" y2="23"/>
+      <line class="ld" x1="55" y1="37" x2="35" y2="37"/>
+      <text class="lbl-b" x="45" y="28.6" text-anchor="middle">HX1</text>
+      <text class="lbl" x="45" y="31.4" text-anchor="middle">EXTRACT COOLER</text>
+      <text class="lbl-s" x="45" y="34" text-anchor="middle">COUNTERFLOW</text>
+
+      <line class="w" x1="56" y1="23" x2="60.4" y2="23"/>
+      <circle class="of" cx="63" cy="23" r="2.6"/>
+      <path class="dot" d="M61.8,21.6 L64.8,23 L61.8,24.4 Z"/>
+      <text class="lbl-s" x="63" y="28.2" text-anchor="middle">P1 PUMP</text>
+      <polyline class="wa" points="65.6,23 74,23 74,18.4"/>
+
+      <rect class="box" x="68" y="8" width="22" height="10"/>
+      <text class="lbl" x="79" y="12.4" text-anchor="middle">THERMOBLOCK</text>
+      <text class="lbl-s" x="79" y="15.4" text-anchor="middle">1.1 KW, 93 °C</text>
+
+      <!-- thermoblock to group, BREW PRESS gauge -->
+      <line class="wa" x1="90" y1="13" x2="101.6" y2="13"/>
+      <circle class="dot" cx="95.4" cy="13" r="0.5"/>
+      <line class="w" x1="95.4" y1="13" x2="95.4" y2="17.4"/>
+      <circle class="of" cx="95.4" cy="19" r="1.6"/>
+      <line class="w" x1="95.4" y1="19" x2="96.4" y2="17.9"/>
+      <text class="lbl-s" x="95.1" y="23" text-anchor="middle">BREW PRESS</text>
+
+      <!-- brew stack: group head, puck, sealed sump -->
+      <rect class="box" x="102" y="8" width="16" height="7.4"/>
+      <text class="lbl" x="110" y="12.6" text-anchor="middle">GROUP HEAD</text>
+      <rect class="box" x="102" y="15.4" width="16" height="3.2"/>
+      <g class="dot"><circle cx="102.8" cy="16.2" r="0.17"/><circle cx="103.6" cy="17.4" r="0.17"/><circle cx="103.9" cy="16.1" r="0.17"/><circle cx="102.9" cy="17.9" r="0.17"/><circle cx="117.2" cy="16.2" r="0.17"/><circle cx="116.4" cy="17.4" r="0.17"/><circle cx="116.1" cy="16.1" r="0.17"/><circle cx="117.1" cy="17.9" r="0.17"/></g>
+      <text class="lbl-s" x="110" y="17.75" text-anchor="middle">PUCK, 18 G</text>
+      <rect class="box" x="102" y="18.6" width="16" height="7.4"/>
+      <text class="lbl" x="110" y="22.2" text-anchor="middle">SEALED SUMP</text>
+      <text class="lbl-s" x="110" y="24.9" text-anchor="middle">PORTAFILTER</text>
+      <polyline class="w" points="118.6,8 120,8 120,26 118.6,26"/>
+      <text class="lbl-s" transform="translate(122.1 17) rotate(-90)" text-anchor="middle">GROUP LOCK</text>
+
+      <!-- extract: sump, HX1 hot pass, T2, BPV-2, cup -->
+      <polyline class="wa" points="110,26 110,37 56.4,37"/>
+      <line class="w" x1="34" y1="37" x2="23.2" y2="37"/>
+      <circle class="dot" cx="27.8" cy="37" r="0.5"/>
+      <line class="w" x1="27.8" y1="37" x2="27.8" y2="33.9"/>
+      <circle class="of" cx="27.8" cy="32.2" r="1.7"/>
+      <text class="lbl-s" x="27.8" y="32.85" text-anchor="middle" style="font-size:1.8px">T2</text>
+      <line class="ev" x1="26.1" y1="32.2" x2="22.8" y2="32.2"/>
+      <path class="of" d="M18.8,35.6 L18.8,38.4 L21,37 Z"/>
+      <path class="of" d="M23.2,35.6 L23.2,38.4 L21,37 Z"/>
+      <line class="w" x1="21" y1="37" x2="21" y2="33.6"/>
+      <rect class="box" x="19.2" y="31.2" width="3.6" height="2.4"/>
+      <text class="lbl-s" x="21" y="30" text-anchor="middle">BPV-2</text>
+      <polyline class="wa" points="18.8,37 7.4,37 7.4,39.8"/>
+      <path class="o" d="M3,40.6 L11.8,40.6 L11,44.6 Q10.8,45.4 10,45.4 L4.8,45.4 Q4,45.4 3.8,44.6 Z"/>
+      <text class="lbl-s" x="13.4" y="44.6">CUP</text>
+
+      <!-- station tags on the lines -->
+      <g transform="translate(21.4 23)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">1</text></g>
+      <g transform="translate(58.2 23)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">2</text></g>
+      <g transform="translate(93 13)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">3</text></g>
+      <g transform="translate(110 30.4)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">4</text></g>
+      <g transform="translate(31.2 37)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">5</text></g>
+      <g transform="translate(14.6 37)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">6</text></g>
+
+      <!-- station data, absolute pressure -->
+      <text class="lbl-s" x="35" y="43.6">STATION DATA:</text>
+      <text class="lbl-s" x="35" y="46">PRESSURE ABS, TEMP</text>
+      <g transform="translate(59.4 40.9)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">1</text><text class="lbl-s" x="2" y="0.75">2.4 BAR, 22 °C</text></g>
+      <g transform="translate(80.4 40.9)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">2</text><text class="lbl-s" x="2" y="0.75">2.4 BAR, 31 °C</text></g>
+      <g transform="translate(101.4 40.9)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">3</text><text class="lbl-s" x="2" y="0.75">10.0 BAR, 93 °C</text></g>
+      <g transform="translate(59.4 44.2)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">4</text><text class="lbl-s" x="2" y="0.75">101 KPA, 88 °C</text></g>
+      <g transform="translate(80.4 44.2)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">5</text><text class="lbl-s" x="2" y="0.75">101 KPA, 76 °C</text></g>
+      <g transform="translate(101.4 44.2)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">6</text><text class="lbl-s" x="2" y="0.75">56.5 KPA, 76 °C</text></g>
+
+      <!-- divider -->
+      <line class="t" x1="124.6" y1="-3.6" x2="124.6" y2="46.4"/>
+
+      <!-- ===== DETAIL A: saturation curve ===== -->
+      <text class="lbl-b" x="127.4" y="-0.8">DETAIL A: SATURATION CURVE</text>
+      <!-- axes -->
+      <polyline class="w" points="139,3 139,33 176,33"/>
+      <g class="t"><line x1="139.00" y1="33" x2="139.00" y2="34.2"/><line x1="144.29" y1="33" x2="144.29" y2="33.8"/><line x1="149.57" y1="33" x2="149.57" y2="34.2"/><line x1="154.86" y1="33" x2="154.86" y2="33.8"/><line x1="160.14" y1="33" x2="160.14" y2="34.2"/><line x1="165.43" y1="33" x2="165.43" y2="33.8"/><line x1="170.71" y1="33" x2="170.71" y2="34.2"/><line x1="176.00" y1="33" x2="176.00" y2="33.8"/><line x1="139" y1="33" x2="137.8" y2="33"/><line x1="139" y1="28" x2="138.2" y2="28"/><line x1="139" y1="23" x2="137.8" y2="23"/><line x1="139" y1="18" x2="138.2" y2="18"/><line x1="139" y1="13" x2="137.8" y2="13"/><line x1="139" y1="8" x2="138.2" y2="8"/><line x1="139" y1="3" x2="137.8" y2="3"/></g>
+      <g class="lbl-s" text-anchor="middle"><text x="139.00" y="36.4">40</text><text x="149.57" y="36.4">60</text><text x="160.14" y="36.4">80</text><text x="170.71" y="36.4">100</text></g>
+      <g class="lbl-s" text-anchor="end"><text x="137.4" y="33.7">70</text><text x="137.4" y="23.7">80</text><text x="137.4" y="13.7">90</text><text x="137.4" y="3.7">100</text></g>
+      <text class="lbl-s" x="157.5" y="39.4" text-anchor="middle">PRESSURE, KPA ABS</text>
+      <text class="lbl-s" transform="translate(131.4 18) rotate(-90)" text-anchor="middle">TEMPERATURE, °C</text>
+      <polyline class="w" points="139.00,27.06 140.32,25.60 141.64,24.21 142.96,22.88 144.29,21.61 145.61,20.39 146.93,19.22 148.25,18.09 149.57,17.01 150.89,15.96 152.21,14.94 153.54,13.96 154.86,13.01 156.18,12.09 157.50,11.19 158.82,10.32 160.14,9.47 161.46,8.64 162.79,7.83 164.11,7.05 165.43,6.28 166.75,5.53 168.07,4.79 169.39,4.07 170.71,3.37 171.41,3.00"/>
+      <line class="ev" x1="139" y1="10" x2="176" y2="10"/>
+      <line class="ev" x1="147.72" y1="3" x2="147.72" y2="33"/>
+      <line class="ev" x1="171.41" y1="3" x2="171.41" y2="33"/>
+      <line class="ev" x1="139" y1="23" x2="171.41" y2="23"/>
+      <text class="lbl-s" x="147.72" y="2.2" text-anchor="middle">CABIN</text>
+      <text class="lbl-s" x="171.41" y="2.2" text-anchor="middle">SUMP</text>
+      <text class="lbl-s" x="157.6" y="15.4">BREW 93 °C</text>
+      <line class="ld" x1="162.6" y1="13.4" x2="162.8" y2="10.4"/>
+      <circle class="dot" cx="147.72" cy="18.54" r="0.5"/>
+      <text class="lbl-s" x="146.62" y="17.94" text-anchor="end">84 °C</text>
+      <g class="w"><line x1="146.82" y1="9.1" x2="148.62" y2="10.9"/><line x1="146.82" y1="10.9" x2="148.62" y2="9.1"/></g>
+      <text class="lbl-s" x="149.32" y="8.6">FLASHES</text>
+      <text class="lbl-s" x="156" y="22.2" text-anchor="middle">T2 LIMIT 80 °C</text>
+      <line class="wa" x1="171.41" y1="16.4" x2="171.41" y2="25.4"/>
+      <line class="wa" x1="170.01" y1="27" x2="149.32" y2="27"/>
+      <text class="lbl-s" x="170.21" y="20.4" text-anchor="end">HX1</text>
+      <text class="lbl-s" x="159.57" y="26.2" text-anchor="middle">BPV-2</text>
+      <text class="lbl-s" x="141" y="6.4">VAPOR</text>
+      <text class="lbl-s" x="162" y="31.4">LIQUID</text>
+      <g transform="translate(171.41 15)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">4</text></g>
+      <g transform="translate(171.41 27)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">5</text></g>
+      <g transform="translate(147.72 27)"><circle class="of" r="1.3"/><text class="lbl-s" y="0.65" text-anchor="middle" style="font-size:1.8px">6</text></g>
+      <text class="code" x="178.6" y="46" text-anchor="end">PEU-502A</text>
+    </svg>
+    <figcaption><span class="n">Figure 2.12-2.</span>PEU Functional Diagram and Saturation Curve</figcaption>
+  </figure>
+
+  <div class="lower">
+    <div>
+      <section class="para">
+        <div class="num">2.12.3</div>
+        <div><h2>PERFORMANCE AND DESIGN DATA.</h2></div>
+      </section>
+      <div class="tcap">Table 2.12-1. PEU Performance Data</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Dose and yield, double shot</td><td class="v">18 g in, 36 g out</td></tr>
+          <tr><td>Pressure across puck</td><td class="v">9.0 bar (130 psi)</td></tr>
+          <tr><td>Brew water temperature</td><td class="v">93 °C (199 °F)</td></tr>
+          <tr><td>Extraction time, nominal</td><td class="v">27 sec</td></tr>
+          <tr><td>Extract temperature at spout</td><td class="v">76 °C (169 °F)</td></tr>
+          <tr><td>Heater power, 120 Vdc bus</td><td class="v">1.1 kW</td></tr>
+          <tr><td>Mass, PEU dry</td><td class="v">14.6 kg (32.2 lb)</td></tr>
+          <tr><td>Crema persistence at 1/6 g</td><td class="v">12 min (1 g: 2 min)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <div class="notice">
+        <span class="tag">WARNING</span>
+        <p>Hold GROUP LOCK at VENT until BREW PRESS reads zero. Brew water flashes at cabin pressure and can throw the puck 6 m at 1/6 g.</p>
+      </div>
+      <div class="card">
+        <div class="bar"><span>PULL SHOT</span><span>CREW</span></div>
+        <ol>
+          <li><span>1</span><span>cb PEU HTR - close</span></li>
+          <li><span>2</span><span>HTR RDY tb - bp, then gray</span></li>
+          <li><span>3</span><span>PORTAFILTER - 18 g, insert</span></li>
+          <li><span>4</span><span>GROUP LOCK - LOCK</span></li>
+          <li><span>5</span><span>BREW - press (27 sec)</span></li>
+          <li><span></span><span>√ BREW PRESS - 9.0 bar</span></li>
+          <li><span>6</span><span>GROUP LOCK - VENT, then OPEN</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="rule"></div>
+    <div class="sub">PRESSURIZED EXTRACTION UNIT</div>
+    <div class="line">
+      <span>Mission <span class="fill" style="width:20mm">&nbsp;</span></span>
+      <span>Basic Date <span class="fill" style="width:30mm">12 March 2029</span></span>
+      <span>Change Date <span class="fill" style="width:30mm">4 September 2029</span></span>
+      <span>Page <span class="fill" style="width:18mm">2.12-1</span></span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Fit check: room left between the last content block and the footer.
+  // .page hides overflow, so without this an overfull page fails silently.
+  // render.sh prints the result from <html data-fit>.
+  document.fonts.ready.then(() => {
+    const page = document.querySelector('.page')
+    const foot = page.querySelector('.foot')
+    let bottom = 0
+    for (const el of page.children) {
+      if (el === foot || el.classList.contains('tab')) continue
+      bottom = Math.max(bottom, el.getBoundingClientRect().bottom)
+    }
+    const free = (foot.getBoundingClientRect().top - bottom) * 25.4 / 96
+    document.documentElement.dataset.fit = free >= 0 ? `ok, ${free.toFixed(1)} mm free above the footer` : `OVERFLOW by ${(-free).toFixed(1)} mm`
+  })
+</script>
+</body>
+</html>

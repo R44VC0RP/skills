@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>JN2A-03 Project Janus Operations Handbook, page 2.4-3</title>
+<style>
+  /* ---------- fonts (files in ./fonts, copied from the skill's assets/fonts) ---------- */
+  /* Leroy-template lettering for every drawing label. */
+  @font-face { font-family: "Routed Gothic"; src: url("../fonts/routed-gothic.ttf"); unicode-range: U+0000-0030, U+0032-FFFF; }
+  @font-face { font-family: "Routed Gothic Narrow"; src: url("../fonts/routed-gothic-narrow.ttf"); unicode-range: U+0000-0030, U+0032-FFFF; }
+  /* Leroy's plain "1" reads as "I" (API V1, T1). Borrow a flagged one. Delete these two
+     rules for a strictly period look on pages without versions or subscripts. */
+  @font-face { font-family: "Routed Gothic"; src: local("Helvetica Neue"), local("HelveticaNeue"), local("Arial"); unicode-range: U+0031; }
+  @font-face { font-family: "Routed Gothic Narrow"; src: local("Helvetica Neue"), local("HelveticaNeue"), local("Arial"); unicode-range: U+0031; }
+  /* IBM Selectric Letter Gothic: crew checklists only. */
+  @font-face { font-family: "Letter Gothic"; src: url("../fonts/LetterGothicCode-R.ttf"); font-weight: 400; }
+  @font-face { font-family: "Letter Gothic"; src: url("../fonts/LetterGothicCode-B.ttf"); font-weight: 700; }
+
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #8a8a86; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @media print { html, body { background: none; } }
+
+  :root {
+    --ink: #000000;
+    --paper: #fbfaf5;   /* screen only; print is pure white (below) */
+    --type: "Iowan Old Style", "Iowan", Georgia, serif;
+    --leroy: "Routed Gothic Narrow", "Routed Gothic", sans-serif;
+    --selectric: "Letter Gothic", "Courier", monospace;
+  }
+  /* Must come after :root. A printed off-white tint is halftoned into dots. */
+  @media print { :root { --paper: #ffffff; } }
+
+  .page {
+    position: relative;
+    width: 210mm;
+    height: 297mm;
+    margin: 0 auto;
+    padding: 9mm 15mm 0 16mm;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--type);
+    font-size: 8pt;
+    line-height: 1.33;
+    letter-spacing: 0.055em;   /* the Selectric typewriter spacing */
+    overflow: hidden;
+  }
+
+  /* ---------- running head / foot ---------- */
+  .head { text-align: center; line-height: 1.25; }
+  .head .doc { font-weight: 700; font-size: 8.6pt; letter-spacing: 0.06em; }
+  .head .title { font-weight: 700; font-size: 8.6pt; letter-spacing: 0.08em; }
+  .head .part { margin-top: 2.2mm; font-size: 8.2pt; letter-spacing: 0.1em; }
+  .rule { height: 0; border-top: 1.5pt solid var(--ink); margin: 1.4mm -2mm 0; }
+
+  .foot { position: absolute; left: 16mm; right: 15mm; bottom: 8mm; }
+  .foot .rule { margin: 0 -2mm 1.6mm; }
+  .foot .sub { text-align: center; letter-spacing: 0.1em; font-size: 8.2pt; }
+  .foot .line { display: flex; align-items: baseline; justify-content: space-between; margin-top: 2.2mm; font-size: 8.2pt; }
+  .foot .fill { display: inline-block; border-bottom: 0.6pt solid var(--ink); text-align: center; padding: 0 1mm; font-size: 8.8pt; letter-spacing: 0.03em; }
+
+  /* ---------- section opener ---------- */
+  .opener { text-align: center; letter-spacing: 0.12em; margin: 3.4mm 0 2mm; line-height: 1.6; }
+
+  /* ---------- numbered paragraphs ---------- */
+  .para { display: grid; grid-template-columns: 19mm 1fr; position: relative; }
+  .para .num { letter-spacing: 0.08em; }
+  .para h2, .para h3 { margin: 0 0 0.8mm; font: inherit; font-weight: 400; letter-spacing: 0.08em; }
+  .para h3 { text-decoration: underline; text-underline-offset: 1.6pt; text-decoration-thickness: 0.5pt; letter-spacing: 0.06em; }
+  .para p { margin: 0 0 1mm; text-indent: 9mm; text-align: left; }
+  .para p.flush { text-indent: 0; }
+  .changebar { position: absolute; left: -9mm; width: 1.3mm; background: var(--ink); }
+  .nowrap { white-space: nowrap; }
+
+  /* ---------- figures ---------- */
+  figure { margin: 1.6mm 0 0; }
+  figure svg { display: block; width: 100%; height: auto; }
+  figcaption { text-align: center; margin-top: 0.6mm; letter-spacing: 0.07em; }
+  figcaption .n { margin-right: 3mm; }
+
+  /* SVG units are millimetres on paper: a figure 180 units wide fills the 179 mm column. */
+  svg text { font-family: var(--leroy); fill: var(--ink); letter-spacing: 0.04px; }
+  svg .o    { fill: none; stroke: var(--ink); stroke-width: 0.42; stroke-linejoin: round; stroke-linecap: round; } /* object line */
+  svg .of   { fill: var(--paper); stroke: var(--ink); stroke-width: 0.42; stroke-linejoin: round; }               /* object, opaque */
+  svg .t    { fill: none; stroke: var(--ink); stroke-width: 0.17; stroke-linecap: round; }                        /* thin detail */
+  svg .hid  { fill: none; stroke: var(--ink); stroke-width: 0.22; stroke-dasharray: 1.3 0.7; }                     /* hidden */
+  svg .cl   { fill: none; stroke: var(--ink); stroke-width: 0.16; stroke-dasharray: 5 0.8 0.9 0.8; }               /* centerline */
+  svg .cut  { fill: none; stroke: var(--ink); stroke-width: 0.5; stroke-dasharray: 5 1 1 1; }                      /* section cut */
+  svg .ld   { fill: none; stroke: var(--ink); stroke-width: 0.16; marker-end: url(#nh-leader); }                   /* leader */
+  svg .dim  { fill: none; stroke: var(--ink); stroke-width: 0.16; marker-start: url(#nh-dim); }                    /* dimension half */
+  svg .w    { fill: none; stroke: var(--ink); stroke-width: 0.3; stroke-linejoin: round; }                         /* wire */
+  svg .wa   { fill: none; stroke: var(--ink); stroke-width: 0.3; stroke-linejoin: round; marker-end: url(#nh-arrow); } /* wire with arrow */
+  svg .box  { fill: var(--paper); stroke: var(--ink); stroke-width: 0.45; }
+  svg .panel{ fill: none; stroke: var(--ink); stroke-width: 0.3; stroke-dasharray: 2 1; }
+  svg .ev   { fill: none; stroke: var(--ink); stroke-width: 0.18; stroke-dasharray: 1 0.7; }                       /* timeline event */
+  svg .vid  { fill: url(#nh-hatch); stroke: var(--ink); stroke-width: 0.35; }                                      /* hatched bar */
+  svg .aud  { fill: var(--paper); stroke: var(--ink); stroke-width: 0.35; }                                        /* plain bar */
+  svg .gap  { fill: var(--paper); stroke: var(--ink); stroke-width: 0.35; stroke-dasharray: 0.6 0.5; }             /* dotted bar */
+  svg .dot  { fill: var(--ink); }
+  svg .lbl   { font-size: 2.35px; }                                         /* callouts, box titles */
+  svg .lbl-s { font-size: 2.05px; }                                         /* secondary lines, wire names */
+  svg .lbl-b { font-size: 2.5px; font-family: "Routed Gothic", sans-serif; } /* view titles, big letters */
+  svg .code  { font-size: 2.4px; font-family: "Routed Gothic", sans-serif; } /* figure code, bottom right */
+
+  /* ---------- lower band: data table + notice + checklist ---------- */
+  .lower { display: grid; grid-template-columns: 1fr 64mm; column-gap: 6mm; margin-top: 2.8mm; }
+  .tcap { text-align: center; letter-spacing: 0.07em; margin: 0 0 0.8mm; }
+  table { width: 100%; border-collapse: collapse; font-size: 7.3pt; line-height: 1.2; }
+  th, td { border: 0.6pt solid var(--ink); padding: 0.35mm 1.6mm; text-align: left; vertical-align: top; font-weight: 400; }
+  thead th { text-align: center; letter-spacing: 0.1em; padding: 0.5mm 1.6mm; }
+  td.v { white-space: nowrap; }
+
+  .notice { text-align: left; margin-bottom: 1.8mm; }
+  .notice .tag { display: block; text-align: center; letter-spacing: 0.18em; font-weight: 700; text-decoration: underline; text-underline-offset: 1.6pt; text-decoration-thickness: 0.6pt; margin-bottom: 0.8mm; }
+  .notice p { margin: 0; font-size: 7.4pt; line-height: 1.28; }
+
+  .card { border: 0.8pt solid var(--ink); font-family: var(--selectric); font-size: 7.1pt; line-height: 1.3; letter-spacing: 0; }
+  .card .bar { background: var(--ink); color: var(--paper); font-weight: 700; padding: 0.5mm 1.8mm; display: flex; justify-content: space-between; }
+  .card ol { list-style: none; margin: 0; padding: 0.8mm 1.8mm 1mm; }
+  .card li { display: grid; grid-template-columns: 3.2mm 1fr; white-space: pre; }
+
+  /* black thumb tab, bleeds off the trim edge */
+  .tab { position: absolute; right: 0; top: 112mm; width: 8.5mm; height: 17mm; background: var(--ink); color: var(--paper);
+    font-family: "Routed Gothic", sans-serif; font-size: 8pt; letter-spacing: 0.08em; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+
+<!-- Shared drawing defs: every figure on the page uses these ids. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="nh-leader" viewBox="0 0 6 4" refX="5.6" refY="2" markerWidth="2.1" markerHeight="1.05" markerUnits="userSpaceOnUse" orient="auto" preserveAspectRatio="none"><path d="M0,0 L6,2 L0,4 Z" fill="#000"/></marker>
+    <marker id="nh-arrow" viewBox="0 0 6 4" refX="5.6" refY="2" markerWidth="2.4" markerHeight="1.3" markerUnits="userSpaceOnUse" orient="auto" preserveAspectRatio="none"><path d="M0,0 L6,2 L0,4 Z" fill="#000"/></marker>
+    <marker id="nh-dim" viewBox="0 0 6 4" refX="0" refY="2" markerWidth="2.2" markerHeight="0.95" markerUnits="userSpaceOnUse" orient="auto" preserveAspectRatio="none"><path d="M6,0 L0,2 L6,4 Z" fill="#000"/></marker>
+    <pattern id="nh-hatch" width="1.1" height="1.1" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="1.1" stroke="#000" stroke-width="0.2"/></pattern>
+    <pattern id="nh-bp" width="1.4" height="1.4" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><rect width="0.7" height="1.4" fill="#000"/></pattern>
+  </defs>
+</svg>
+
+<div class="page">
+
+  <header class="head">
+    <div class="doc">JN2A-03-BLOCK I-(1)</div>
+    <div class="title">PROJECT JANUS OPERATIONS HANDBOOK</div>
+    <div class="part">SYSTEMS DATA</div>
+    <div class="rule"></div>
+  </header>
+
+  <div class="tab">AGS</div>
+
+  <div class="opener">
+    SECTION 2 &nbsp;&nbsp;&middot;&nbsp;&nbsp; SUBSECTION 2.4<br>
+    APERTURE GENERATION SUBSYSTEM
+  </div>
+
+  <section class="para">
+    <div class="num">2.4.1</div>
+    <div>
+      <h2>INTRODUCTION.</h2>
+      <p>The aperture generation subsystem (AGS) of the handheld aperture projector (HAP) produces a conjugate pair of planar apertures, designated A and B, on qualified surfaces up to 300 meters (984 feet) away. Matter entering either aperture exits the other without traversing the intervening space (figure 2.4-1).</p>
+    </div>
+  </section>
+
+  <!-- ================= FIGURE 2.4-1 : GENERAL ARRANGEMENT ================= -->
+  <figure>
+    <svg viewBox="0 0 180 67.4" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Handheld aperture projector general arrangement">
+
+      <!-- centerline / beam axis -->
+      <line class="cl" x1="12" y1="30" x2="141" y2="30"/>
+
+      <!-- ===== rear housing ===== -->
+      <path class="of" d="M24,21 L74,19.5 L76,20.4 L76,39.6 L74,40.5 L24,39 C19.5,39 17,35 17,30 C17,25 19.5,21 24,21 Z"/>
+      <line class="t" x1="22.6" y1="21.3" x2="22.6" y2="38.7"/>
+      <circle class="t" cx="19.6" cy="24.6" r="0.55"/>
+      <circle class="t" cx="19.6" cy="35.4" r="0.55"/>
+      <!-- body parting line -->
+      <path class="t" d="M22.6,33.4 L74,33.4"/>
+      <!-- power cell (hidden) -->
+      <rect class="hid" x="25" y="23.4" width="15" height="8.6"/>
+      <!-- status lamps -->
+      <path class="o" d="M26.6,20.95 A1.35,1.35 0 0 1 29.3,20.87"/>
+      <path class="o" d="M31.4,20.8 A1.35,1.35 0 0 1 34.1,20.72"/>
+      <!-- rangefinder -->
+      <rect class="of" x="42" y="15.4" width="23" height="4.4" rx="0.8"/>
+      <rect class="of" x="65" y="15.9" width="1.6" height="3.4"/>
+      <line class="t" x1="45" y1="17.6" x2="62" y2="17.6"/>
+      <!-- cooling louvers -->
+      <g class="t">
+        <line x1="58" y1="23.4" x2="59" y2="30.6"/><line x1="60" y1="23.3" x2="61" y2="30.6"/>
+        <line x1="62" y1="23.2" x2="63" y2="30.6"/><line x1="64" y1="23.2" x2="65" y2="30.6"/>
+        <line x1="66" y1="23.1" x2="67" y2="30.6"/><line x1="68" y1="23.0" x2="69" y2="30.6"/>
+      </g>
+      <!-- aperture select switch S1 -->
+      <rect class="of" x="47.5" y="34.8" width="5.4" height="3" rx="0.4"/>
+      <line class="o" x1="50.2" y1="36.3" x2="52.4" y2="32.6"/>
+      <circle class="of" cx="52.6" cy="32.3" r="0.65"/>
+
+      <!-- ===== pistol grip, guard, trigger ===== -->
+      <path class="of" d="M35,39.2 L46.6,39.6 L43.8,60.2 C43.4,62 42,62.6 40.2,62.6 L34,62.6 C32.4,62.6 31.6,61.6 31.8,60 Z"/>
+      <g class="t">
+        <line x1="34.1" y1="45" x2="44.9" y2="45.3"/><line x1="33.8" y1="47.5" x2="44.6" y2="47.8"/>
+        <line x1="33.4" y1="50" x2="44.2" y2="50.3"/><line x1="33.1" y1="52.5" x2="43.9" y2="52.8"/>
+        <line x1="32.7" y1="55" x2="43.5" y2="55.3"/><line x1="32.4" y1="57.5" x2="43.2" y2="57.8"/>
+      </g>
+      <path class="o" d="M58,40.3 L58,43.2 C58,47.6 52.4,49.4 45.6,47.6"/>
+      <path class="of" d="M50.6,40.1 C49.4,42.6 49.9,44.7 52.1,45.7 L52.9,44.9 C51.4,43.9 51.2,42 52.2,40.2 Z"/>
+
+      <!-- ===== containment chamber ===== -->
+      <rect class="of" x="76" y="16" width="3" height="28"/>
+      <rect class="of" x="97" y="16" width="3" height="28"/>
+      <line class="o" x1="79" y1="17.6" x2="97" y2="17.6"/>
+      <line class="o" x1="79" y1="42.4" x2="97" y2="42.4"/>
+      <line class="t" x1="79" y1="16.5" x2="97" y2="16.5"/>
+      <line class="t" x1="79" y1="43.5" x2="97" y2="43.5"/>
+      <!-- glass convention -->
+      <g class="t"><line x1="80.6" y1="21.4" x2="83" y2="19.2"/><line x1="81.6" y1="22.4" x2="84.6" y2="19.6"/><line x1="92.4" y1="40.4" x2="95.2" y2="37.8"/><line x1="93.6" y1="40.8" x2="95.8" y2="38.8"/></g>
+      <!-- suspension struts -->
+      <g class="t"><line x1="86" y1="27.6" x2="79" y2="18.8"/><line x1="86" y1="32.4" x2="79" y2="41.2"/><line x1="91" y1="27.6" x2="97" y2="18.8"/><line x1="91" y1="32.4" x2="97" y2="41.2"/></g>
+      <!-- singularity core -->
+      <circle class="hid" cx="88.5" cy="30" r="4.2"/>
+      <circle class="of" cx="88.5" cy="30" r="2.5"/>
+      <circle class="dot" cx="88.5" cy="30" r="1.15"/>
+
+      <!-- ===== field coils L1-L4 ===== -->
+      <rect class="of" x="100.4" y="17"   width="2" height="26"/>
+      <rect class="of" x="102.9" y="18.2" width="2" height="23.6"/>
+      <rect class="of" x="105.4" y="19.4" width="2" height="21.2"/>
+      <rect class="of" x="107.9" y="20.6" width="2" height="18.8"/>
+
+      <!-- ===== emitter + prongs ===== -->
+      <rect class="of" x="109.9" y="26" width="8.2" height="8"/>
+      <path class="o" d="M118.1,26.6 Q119.6,30 118.1,33.4"/>
+      <line class="t" x1="112" y1="26" x2="112" y2="34"/><line class="t" x1="115" y1="26" x2="115" y2="34"/>
+      <path class="of" d="M109.6,21.4 C116.5,17.4 124.6,18 130.2,24.6 L128.7,25.7 C123.6,21.1 117.2,21.1 110,24.1 Z"/>
+      <path class="of" d="M109.6,38.6 C116.5,42.6 124.6,42 130.2,35.4 L128.7,34.3 C123.6,38.9 117.2,38.9 110,35.9 Z"/>
+      <circle class="of" cx="129.7" cy="25.1" r="0.85"/>
+      <circle class="of" cx="129.7" cy="34.9" r="0.85"/>
+
+      <!-- ===== section cut A-A (at L2) ===== -->
+      <line class="cut" x1="103.9" y1="12.6" x2="103.9" y2="47.4"/>
+      <polyline class="w" points="103.9,12.6 107.6,12.6"/><path d="M107.4,11.6 L109.4,12.6 L107.4,13.6 Z" class="dot"/>
+      <polyline class="w" points="103.9,47.4 107.6,47.4"/><path d="M107.4,46.4 L109.4,47.4 L107.4,48.4 Z" class="dot"/>
+      <text class="lbl-b" x="110.4" y="13.5">A</text>
+      <text class="lbl-b" x="110.4" y="48.3">A</text>
+
+      <!-- ===== callouts: top ===== -->
+      <text class="lbl" x="11" y="8.6">STATUS LAMPS A, B</text>
+      <line class="ld" x1="22" y1="9.6" x2="27.6" y2="19.3"/>
+      <text class="lbl" x="38.5" y="5.2">RANGEFINDER (T&amp;R)</text>
+      <line class="ld" x1="47" y1="6.2" x2="50" y2="15.2"/>
+      <text class="lbl" x="58.5" y="9.6">CONTAINMENT CHAMBER</text>
+      <text class="lbl" x="58.5" y="12.2">(FUSED SILICA)</text>
+      <line class="ld" x1="78" y1="10.4" x2="84" y2="17.4"/>
+      <text class="lbl" x="84" y="5.2">SINGULARITY CORE</text>
+      <line class="ld" x1="90" y1="6.2" x2="88.8" y2="27.4"/>
+      <text class="lbl" x="111" y="7.4">FIELD COIL ASSY L1–L4</text>
+      <line class="ld" x1="113" y1="8.4" x2="106.4" y2="19.2"/>
+      <text class="lbl" x="128.6" y="13.8">FIELD SHAPING</text>
+      <text class="lbl" x="128.6" y="16.4">PRONG (3)</text>
+      <line class="ld" x1="131" y1="17.4" x2="126.6" y2="21.4"/>
+      <text class="lbl-s" x="132" y="28.6">+X</text>
+
+      <!-- ===== callouts: bottom ===== -->
+      <text class="lbl" x="12.8" y="46.6">ACCESS COVER,</text>
+      <text class="lbl" x="12.8" y="49.2">POWER CELL</text>
+      <line class="ld" x1="18" y1="44.6" x2="19.8" y2="37.4"/>
+      <text class="lbl" x="58.4" y="51.4">APERTURE SEL SW S1</text>
+      <text class="lbl" x="58.4" y="54">(A – OFF – B)</text>
+      <line class="ld" x1="57.8" y1="50" x2="53.2" y2="38"/>
+      <text class="lbl" x="58.4" y="59.4">TRIGGER S2</text>
+      <line class="ld" x1="57.8" y1="58" x2="52.4" y2="45.6"/>
+      <text class="lbl" x="68" y="46.6">COOLING LOUVERS (6)</text>
+      <line class="ld" x1="71" y1="44.6" x2="66.4" y2="30.8"/>
+      <text class="lbl" x="84" y="52.2">CORE SUSPENSION STRUT (4)</text>
+      <line class="ld" x1="88" y1="50.4" x2="89.6" y2="35"/>
+      <text class="lbl" x="106.6" y="56.6">EMITTER APERTURE</text>
+      <line class="ld" x1="116.4" y1="54.4" x2="118.6" y2="33.6"/>
+      <text class="lbl-s" x="26" y="35.6">POWER CELL</text>
+
+      <!-- ===== dimensions ===== -->
+      <line class="t" x1="17" y1="39.6" x2="17" y2="66.4"/>
+      <line class="t" x1="130.6" y1="36" x2="130.6" y2="66.4"/>
+      <line class="dim" x1="17" y1="65.2" x2="63.6" y2="65.2"/>
+      <line class="dim" x1="130.6" y1="65.2" x2="83.6" y2="65.2"/>
+      <text class="lbl" x="65.2" y="66">27.60 [701]</text>
+      <line class="t" x1="41" y1="15.4" x2="6.4" y2="15.4"/>
+      <line class="t" x1="31" y1="62.6" x2="6.4" y2="62.6"/>
+      <line class="dim" x1="8" y1="15.4" x2="8" y2="34.4"/>
+      <line class="dim" x1="8" y1="62.6" x2="8" y2="43.8"/>
+      <text class="lbl" transform="translate(8.9 43.4) rotate(-90)">9.25 [235]</text>
+
+      <!-- ===== section A-A view ===== -->
+      <g transform="translate(160 29)">
+        <circle r="13.4" fill="url(#nh-hatch)" stroke="none"/>
+        <circle r="10.6" class="of"/>
+        <circle r="13.4" class="o"/>
+        <circle r="4.1" class="of"/>
+        <circle r="2.5" class="t"/>
+        <circle r="0.9" class="dot"/>
+        <g class="of">
+          <rect x="-1.15" y="-10.2" width="2.3" height="5.4" rx="1.1"/>
+          <rect x="-1.15" y="-10.2" width="2.3" height="5.4" rx="1.1" transform="rotate(120)"/>
+          <rect x="-1.15" y="-10.2" width="2.3" height="5.4" rx="1.1" transform="rotate(240)"/>
+        </g>
+        <line class="cl" x1="-16.4" y1="0" x2="16.4" y2="0"/>
+        <line class="cl" x1="0" y1="-16.4" x2="0" y2="16.4"/>
+        <text class="lbl-s" x="9" y="-12.6">L2</text>
+      </g>
+      <text class="lbl-b" x="160" y="49.6" text-anchor="middle">SECTION A–A</text>
+      <text class="lbl-s" x="160" y="52.4" text-anchor="middle">LOOKING FWD, SCALE 1/2</text>
+
+      <!-- coordinate axes -->
+      <g transform="translate(150 63.6)">
+        <line class="wa" x1="0" y1="0" x2="8.4" y2="0"/>
+        <line class="wa" x1="0" y1="0" x2="0" y2="-5.6"/>
+        <circle r="0.9" class="of"/><circle r="0.28" class="dot"/>
+        <text class="lbl-s" x="9.2" y="0.8">+X</text>
+        <text class="lbl-s" x="-1.2" y="-6.4">+Z</text>
+        <text class="lbl-s" x="-4.8" y="2.8">+Y</text>
+      </g>
+
+      <text class="code" x="178.6" y="66.6" text-anchor="end">AGS-501B</text>
+    </svg>
+    <figcaption><span class="n">Figure 2.4-1.</span>Handheld Aperture Projector, General Arrangement</figcaption>
+  </figure>
+
+  <section class="para" style="margin-top:2.2mm">
+    <div class="num">2.4.2</div>
+    <div>
+      <h2>FUNCTIONAL DESCRIPTION.</h2>
+      <p>With AGS MAIN A and B closed, the power cells energize the phase-lock oscillator (PLO) and the AGS RDY talkback goes gray. With APERTURE SEL at A or B, the trigger commands the field coil driver (FCD) to discharge through coils L1 through L4; the prongs collimate the field into a beam that forms the selected aperture on a qualified surface (figure 2.4-2). A second aperture of the same designation collapses the first.</p>
+    </div>
+  </section>
+
+  <section class="para">
+    <div class="changebar" style="top:0.4mm; height:6.8mm"></div>
+    <div class="num">2.4.2.1</div>
+    <div>
+      <h3>Momentum Conservation.</h3>
+      <p class="flush">An object traversing the aperture pair leaves along the exit surface normal with its entry speed unchanged (|v<sub>exit</sub>| = |v<sub>entry</sub>|).</p>
+    </div>
+  </section>
+
+  <!-- ================= FIGURE 2.4-2 : FUNCTIONAL DIAGRAM ================= -->
+  <figure>
+    <svg viewBox="0 -1.8 180 48.3" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aperture generation subsystem functional diagram">
+
+      <!-- power cells -->
+      <rect class="box" x="3" y="5" width="19" height="11"/>
+      <text class="lbl" x="12.5" y="9.6" text-anchor="middle">POWER CELL A</text>
+      <text class="lbl-s" x="12.5" y="12.8" text-anchor="middle">28 VDC  2.6 A-H</text>
+      <rect class="box" x="3" y="25" width="19" height="11"/>
+      <text class="lbl" x="12.5" y="29.6" text-anchor="middle">POWER CELL B</text>
+      <text class="lbl-s" x="12.5" y="32.8" text-anchor="middle">28 VDC  2.6 A-H</text>
+
+      <!-- breakers CB1, CB2 -->
+      <line class="w" x1="22" y1="10.5" x2="28.6" y2="10.5"/>
+      <circle class="of" cx="29.2" cy="10.5" r="0.6"/><circle class="of" cx="33.8" cy="10.5" r="0.6"/>
+      <path class="w" d="M29.4,9.6 Q31.5,7.4 33.6,9.6"/>
+      <line class="w" x1="31.5" y1="8.1" x2="31.5" y2="6.6"/><line class="w" x1="30.4" y1="6.6" x2="32.6" y2="6.6"/>
+      <line class="w" x1="34.4" y1="10.5" x2="42" y2="10.5"/>
+      <text class="lbl-s" x="31.5" y="5.4" text-anchor="middle">CB1</text>
+      <text class="lbl-s" x="31.5" y="13.2" text-anchor="middle">15A</text>
+      <text class="lbl-s" x="31.5" y="15.6" text-anchor="middle">AGS MAIN A</text>
+
+      <line class="w" x1="22" y1="30.5" x2="28.6" y2="30.5"/>
+      <circle class="of" cx="29.2" cy="30.5" r="0.6"/><circle class="of" cx="33.8" cy="30.5" r="0.6"/>
+      <path class="w" d="M29.4,29.6 Q31.5,27.4 33.6,29.6"/>
+      <line class="w" x1="31.5" y1="28.1" x2="31.5" y2="26.6"/><line class="w" x1="30.4" y1="26.6" x2="32.6" y2="26.6"/>
+      <line class="w" x1="34.4" y1="30.5" x2="42" y2="30.5"/>
+      <text class="lbl-s" x="31.5" y="25.4" text-anchor="middle">CB2</text>
+      <text class="lbl-s" x="31.5" y="33.2" text-anchor="middle">15A</text>
+      <text class="lbl-s" x="31.5" y="35.6" text-anchor="middle">AGS MAIN B</text>
+
+      <!-- AGS bus -->
+      <rect class="box" x="42" y="4" width="2" height="39.6"/>
+      <text class="lbl-s" transform="translate(40.9 23.6) rotate(-90)" text-anchor="middle">AGS BUS</text>
+      <circle class="dot" cx="42" cy="10.5" r="0.55"/><circle class="dot" cx="42" cy="30.5" r="0.55"/>
+
+      <!-- main power feed to FCD -->
+      <polyline class="w" points="44,6 47,6 47,1.8 127,1.8 127,6"/>
+      <circle class="dot" cx="44" cy="6" r="0.5"/>
+      <text class="lbl-s" x="100" y="1">28 VDC MAIN</text>
+
+      <!-- panel 1 (handgrip) -->
+      <rect class="panel" x="49.5" y="4.2" width="28" height="35"/>
+      <text class="lbl-s" x="63.5" y="38.2" text-anchor="middle">PANEL 1 (HANDGRIP)</text>
+
+      <!-- S2 trigger (pushbutton) -->
+      <line class="w" x1="44" y1="32" x2="54" y2="32"/>
+      <circle class="dot" cx="44" cy="32" r="0.5"/>
+      <circle class="of" cx="54.6" cy="32" r="0.6"/><circle class="of" cx="59.4" cy="32" r="0.6"/>
+      <line class="w" x1="53.8" y1="29.8" x2="60.2" y2="29.8"/>
+      <line class="w" x1="57" y1="29.8" x2="57" y2="27.8"/><line class="w" x1="55.8" y1="27.8" x2="58.2" y2="27.8"/>
+      <text class="lbl-s" x="57" y="35.2" text-anchor="middle">S2 TRIGGER</text>
+      <polyline class="w" points="60,32 62.4,32 62.4,21.4 57.6,21.4 57.6,19.2"/>
+
+      <!-- S1 selector A / OFF / B -->
+      <text class="lbl-s" x="51" y="7.6">S1 APERTURE SEL</text>
+      <circle class="of" cx="57.6" cy="18.6" r="0.6"/>
+      <line class="w" x1="58" y1="18.2" x2="64.5" y2="12.8"/>
+      <circle class="of" cx="65.2" cy="12.4" r="0.6"/>
+      <circle class="of" cx="65.6" cy="18.6" r="0.6"/>
+      <circle class="of" cx="65.2" cy="24.8" r="0.6"/>
+      <text class="lbl-s" x="64.6" y="10.8">A</text>
+      <text class="lbl-s" x="66.8" y="19.4">OFF</text>
+      <text class="lbl-s" x="64.6" y="27.8">B</text>
+      <polyline class="w" points="65.8,12.4 80.6,12.4 80.6,9 84,9"/>
+      <polyline class="w" points="65.8,24.8 82,24.8 82,15 84,15"/>
+      <text class="lbl-s" x="68.4" y="11.6">SEL A</text>
+      <text class="lbl-s" x="68.4" y="24">SEL B</text>
+      <g transform="translate(77 12.4)"><polygon class="of" points="-1.4,0 -0.7,-1.2 0.7,-1.2 1.4,0 0.7,1.2 -0.7,1.2"/><text class="lbl-s" x="0" y="0.7" text-anchor="middle" style="font-size:1.8px">1</text></g>
+      <g transform="translate(77 24.8)"><polygon class="of" points="-1.4,0 -0.7,-1.2 0.7,-1.2 1.4,0 0.7,1.2 -0.7,1.2"/><text class="lbl-s" x="0" y="0.7" text-anchor="middle" style="font-size:1.8px">2</text></g>
+
+      <!-- AGS RDY talkback: bus power, FCD ready signal -->
+      <line class="w" x1="44" y1="43.6" x2="67.8" y2="43.6"/>
+      <circle class="dot" cx="44" cy="43.6" r="0.5"/>
+      <circle cx="70" cy="43.6" r="2.2" fill="url(#nh-bp)" stroke="#000000" stroke-width="0.35"/>
+      <polyline class="w" points="120,18 120,22.6 113,22.6 113,40.4 70,40.4 70,41.4"/>
+      <circle class="dot" cx="113" cy="40.4" r="0" />
+      <text class="lbl-s" x="114" y="25.4">RDY</text>
+      <text class="lbl-s" x="73.4" y="43.4">AGS RDY TB</text>
+      <text class="lbl-s" x="73.4" y="45.8">GRAY = READY, BP = CHARGING</text>
+
+      <!-- PLO -->
+      <rect class="box" x="84" y="5" width="25" height="13"/>
+      <text class="lbl" x="96.5" y="9.6" text-anchor="middle">PHASE-LOCK</text>
+      <text class="lbl" x="96.5" y="12.4" text-anchor="middle">OSCILLATOR</text>
+      <text class="lbl-s" x="96.5" y="15.4" text-anchor="middle">(PLO)</text>
+
+      <!-- rangefinder -->
+      <rect class="box" x="84" y="28" width="25" height="11"/>
+      <text class="lbl" x="96.5" y="32.6" text-anchor="middle">RANGEFINDER</text>
+      <text class="lbl-s" x="96.5" y="35.6" text-anchor="middle">(T&amp;R)  0–300 M</text>
+      <line class="wa" x1="96.5" y1="28" x2="96.5" y2="18.4"/>
+      <text class="lbl-s" x="97.6" y="23.6">RANGE</text>
+
+      <!-- FCD -->
+      <rect class="box" x="117" y="6" width="20" height="12"/>
+      <text class="lbl" x="127" y="10.6" text-anchor="middle">FIELD COIL</text>
+      <text class="lbl" x="127" y="13.4" text-anchor="middle">DRIVER</text>
+      <text class="lbl-s" x="127" y="16.2" text-anchor="middle">(FCD)</text>
+      <line class="wa" x1="109" y1="11.5" x2="116.6" y2="11.5"/>
+      <text class="lbl-s" x="110.2" y="10.2">PHASE</text>
+
+      <!-- coils L1-L4 -->
+      <line class="w" x1="137" y1="12" x2="141" y2="12"/>
+      <path class="w" d="M141,12 a1.4,1.4 0 0 1 2.8,0 a1.4,1.4 0 0 1 2.8,0 a1.4,1.4 0 0 1 2.8,0 a1.4,1.4 0 0 1 2.8,0"/>
+      <line class="w" x1="152.2" y1="12" x2="154" y2="12"/>
+      <text class="lbl-s" x="146.6" y="8.8" text-anchor="middle">L1–L4</text>
+      <text class="lbl-s" x="146.6" y="15.6" text-anchor="middle">4.2 MW PK</text>
+      <polyline class="wa" points="154,12 154,23.6"/>
+
+      <!-- containment -->
+      <rect class="box" x="117" y="28" width="20" height="11"/>
+      <text class="lbl" x="127" y="32.6" text-anchor="middle">CONTAINMENT</text>
+      <text class="lbl-s" x="127" y="35.6" text-anchor="middle">CHAMBER  3.2 K</text>
+      <line class="wa" x1="137" y1="31" x2="147.6" y2="31"/>
+      <text class="lbl-s" x="138.4" y="29.8">FLUX</text>
+
+      <!-- emitter -->
+      <rect class="box" x="148" y="24" width="12" height="11"/>
+      <text class="lbl" x="154" y="30.2" text-anchor="middle">EMITTER</text>
+
+      <!-- apertures -->
+      <line class="wa" x1="160" y1="27" x2="167.6" y2="15"/>
+      <line class="wa" x1="160" y1="32" x2="167.6" y2="36.6"/>
+      <ellipse class="box" cx="172.2" cy="10.6" rx="3.5" ry="6"/>
+      <ellipse cx="172.2" cy="37.6" rx="3.5" ry="5.6" fill="url(#nh-bp)" stroke="#000000" stroke-width="0.45"/>
+      <text class="lbl-b" x="172.2" y="11.5" text-anchor="middle">A</text>
+      <rect x="170.6" y="35.8" width="3.2" height="3.2" style="fill: var(--paper)"/>
+      <text class="lbl-b" x="172.2" y="38.5" text-anchor="middle">B</text>
+      <text class="lbl-s" x="172.2" y="19.4" text-anchor="middle">APERTURE</text>
+      <text class="lbl-s" x="172.2" y="29.6" text-anchor="middle">APERTURE</text>
+
+      <text class="code" x="178.6" y="46.2" text-anchor="end">AGS-502A</text>
+    </svg>
+    <figcaption><span class="n">Figure 2.4-2.</span>AGS Functional Diagram</figcaption>
+  </figure>
+
+  <!-- ================= LOWER BAND ================= -->
+  <div class="lower">
+    <div>
+      <section class="para" style="grid-template-columns: 19mm 1fr">
+        <div class="num">2.4.3</div>
+        <div><h2>PERFORMANCE AND DESIGN DATA.</h2></div>
+      </section>
+      <div class="tcap">Table 2.4-1. AGS Performance Data</div>
+      <table>
+        <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Aperture size, major × minor axis</td><td class="v">2.03 × 1.22 m (80 × 48 in.)</td></tr>
+          <tr><td>Maximum projection range</td><td class="v">300 m (984 ft)</td></tr>
+          <tr><td>Aperture formation time</td><td class="v">0.42 sec</td></tr>
+          <tr><td>Surface flatness, minimum</td><td class="v">±0.5 deg over 2.1 m</td></tr>
+          <tr><td>Peak field power</td><td class="v">4.2 MW for 3 msec</td></tr>
+          <tr><td>Power cells</td><td class="v">2 × 28 Vdc, 2.6 A-h</td></tr>
+          <tr><td>Mass, HAP with cells</td><td class="v">4.1 kg (9.0 lb)</td></tr>
+          <tr><td>Operating temperature</td><td class="v">−40° to +71° C</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="notice">
+        <span class="tag">WARNING</span>
+        <p>Do not place apertures A and B in vertical alignment. A crewman falling through the pair cycles until terminal velocity, in about 12 sec.</p>
+      </div>
+      <div class="card">
+        <div class="bar"><span>AGS ACTIVATION</span><span>HAP</span></div>
+        <ol>
+          <li><span>1</span><span>cb AGS MAIN A,B - close (2)</span></li>
+          <li><span>2</span><span>AGS RDY tb - bp, then gray</span></li>
+          <li><span>3</span><span>APERTURE SEL - A</span></li>
+          <li><span>4</span><span>Aim at qualified surface</span></li>
+          <li><span>5</span><span>TRIGGER - press, release</span></li>
+          <li><span></span><span>√ STATUS LAMP A - on</span></li>
+          <li><span>6</span><span>APERTURE SEL - B, rpt 4,5</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="rule"></div>
+    <div class="sub">APERTURE GENERATION SUBSYSTEM</div>
+    <div class="line">
+      <span>Mission <span class="fill" style="width:20mm">&nbsp;</span></span>
+      <span>Basic Date <span class="fill" style="width:30mm">15 March 1971</span></span>
+      <span>Change Date <span class="fill" style="width:30mm">9 August 1971</span></span>
+      <span>Page <span class="fill" style="width:18mm">2.4-3</span></span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  // Fit check: room left between the last content block and the footer.
+  // .page hides overflow, so without this an overfull page fails silently.
+  // render.sh prints the result from <html data-fit>.
+  document.fonts.ready.then(() => {
+    const page = document.querySelector('.page')
+    const foot = page.querySelector('.foot')
+    let bottom = 0
+    for (const el of page.children) {
+      if (el === foot || el.classList.contains('tab')) continue
+      bottom = Math.max(bottom, el.getBoundingClientRect().bottom)
+    }
+    const free = (foot.getBoundingClientRect().top - bottom) * 25.4 / 96
+    document.documentElement.dataset.fit = free >= 0 ? `ok, ${free.toFixed(1)} mm free above the footer` : `OVERFLOW by ${(-free).toFixed(1)} mm`
+  })
+</script>
+</body>
+</html>
